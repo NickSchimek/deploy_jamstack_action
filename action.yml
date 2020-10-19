@@ -1,0 +1,38 @@
+name: 'Deploy Site'
+description: 'Deploy static site to gh-pages (GitHub pages)'
+author: 'Nick Schimek'
+branding:
+  icon: send
+  color: green
+inputs:
+  build-dir:
+    description: 'The build directory'
+    required: false
+    default: build
+  deploy-branch:
+    description: 'The branch to deploy to your site to'
+    required: false
+    default: gh-pages
+  github-token:
+    description: 'GitHub token'
+    required: false
+    default: ${{ github.token }}
+  github-actor:
+    description: 'Name of the deploy actor'
+    required: false
+    default: ${{ github.actor }}
+  github-repo:
+    description: 'Github repository to push built site to'
+    required: false
+    default: ${{ github.repository }}
+runs:
+  using: 'composite'
+  steps:
+    - run: ${{ github.action_path }}/deploy.sh
+      shell: bash
+      env:
+        DIR: ${{ inputs.build-dir }}
+        BRANCH: ${{ inputs.deploy-branch }}
+        TOKEN: ${{ inputs.github-token }}
+        ACTOR: ${{ inputs.github-actor }}
+        REPO: ${{ inputs.github-repo }}
